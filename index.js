@@ -1,9 +1,16 @@
-const koa = require('koa');
-const bodyParser = require('koa-bodyparser');
-const userRoutes = require('./routes/users.routes');
+const { MongoClient } = require('mongodb');
 
-const app = new koa();
-app.use(bodyParser());
+const client = new MongoClient('mongodb://localhost:27017', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
-app.use(userRoutes.routes()).use(userRoutes.allowedMethods());
-app.listen(3000)
+client.connect(err => {
+    if (err) {
+        console.error(err);
+        process.exit(-1);
+    }
+console.log("connected to mongoDB");
+});
+
+module.exports = client;
